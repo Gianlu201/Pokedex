@@ -1,0 +1,55 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Outfit', serif;
+}
+
+a:link,
+a:visited {
+  color: black;
+  text-decoration: none;
+}
+
+/* .pokedex {
+  font-family: 'Pokemon Solid', sans-serif;
+} */
+
+body {
+  background-color: #f6f8fc;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #ec2e30;
+}
+
+.display-style .active {
+}
+
+#btnSearch {
+  background-color: #ec2e30;
+}
+
+.pokeSprite {
+  width: 30%;
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.card-title {
+  text-transform: capitalize;
+}
+
+#infoCol {
+  height: 80vh;
+}
+
+#imgSelectedPokemon {
+  position: absolute;
+  top: -25%;
+  left: 50%;
+  transform: translateX(-50%);
+}
