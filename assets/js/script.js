@@ -8,6 +8,16 @@ const pokemonInfoBox = document.getElementById('pokemonInfoBox');
 const infoCard = document.getElementById('infoCard');
 const defaultPhrase = document.getElementById('defaultPhrase');
 const pokemonInfos = document.getElementById('pokemonInfos');
+const selectedPokemonName = document.getElementById('selectedPokemonName');
+const selectedPokemonNumer = document.getElementById('selectedPokemonNumer');
+const selectedPokemonTypeBox = document.getElementById(
+  'selectedPokemonTypeBox'
+);
+const selectedPokemonDescription = document.getElementById(
+  'selectedPokemonDescription'
+);
+const selectedPokemonHeight = document.getElementById('selectedPokemonHeight');
+const selectedPokemonWeight = document.getElementById('selectedPokemonWeight');
 
 const pokemonsArr = [];
 let pokeCount;
@@ -119,6 +129,27 @@ function showInfoAbout(num, url) {
 
     defaultPhrase.setAttribute('hidden', 'true');
     pokemonInfos.classList.remove('d-none');
+
+    selectedPokemonName.innerText = pokemon.name;
+    selectedPokemonNumer.innerText = `N° ${pokemon.id}`;
+
+    selectedPokemonTypeBox.innerHTML = '';
+    for (let i = 0; i < pokemon.types.length; i++) {
+      const newType = document.createElement('span');
+      newType.classList.add(
+        `type-${pokemon.types[i].type.name}`,
+        'mx-1',
+        'py-1',
+        'px-2',
+        'rounded-3'
+      );
+      newType.innerText = pokemon.types[i].type.name;
+
+      selectedPokemonTypeBox.appendChild(newType);
+    }
+
+    selectedPokemonHeight.innerText = `${pokemon.height / 10}m`;
+    selectedPokemonWeight.innerText = `${pokemon.weight / 10}kg`;
   }, 1000);
 
   setTimeout(() => {
@@ -131,6 +162,31 @@ async function getSpecies(url) {
     const response = await fetch(url);
     const data = await response.json();
     console.log(data);
+    let next = false;
+    data.flavor_text_entries.forEach((element) => {
+      // console.log(element.flavor_text);
+      if (!next) {
+        if (element.language.name == 'en') {
+          let phrase = element.flavor_text.split('');
+
+          let index = phrase.indexOf('\n');
+          while (index > 0) {
+            phrase[index] = ' ';
+            index = phrase.indexOf('\n');
+          }
+
+          index = phrase.indexOf('\f');
+          while (index > 0) {
+            phrase[index] = ' ';
+            index = phrase.indexOf('\f');
+          }
+
+          selectedPokemonDescription.innerText = phrase.join('');
+          next = true;
+        }
+      }
+    });
+
     return data;
   } catch (error) {
     console.log(error);

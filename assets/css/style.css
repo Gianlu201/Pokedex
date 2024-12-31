@@ -59,6 +59,15 @@ header {
   cursor: pointer;
 }
 
+.card:hover {
+  border: 1px solid black;
+}
+
+.card:hover .pokeSprite {
+  width: 40%;
+  top: -58%;
+}
+
 .pokeSprite {
   width: 30%;
   position: absolute;
@@ -243,6 +252,7 @@ header {
 
 #pokemonInfos {
   overflow-y: scroll;
+  scroll-behavior: smooth;
   padding-bottom: 30px;
 }
 
@@ -259,6 +269,7 @@ header {
 #selectedPokemonTypeBox span {
   font-size: 0.8em;
   font-weight: 500;
+  text-transform: capitalize;
 }
 
 #selectedPokemonDescription {
