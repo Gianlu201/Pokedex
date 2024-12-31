@@ -3,6 +3,11 @@ const dispList = document.querySelector('.display-style span:nth-of-type(2)');
 const searchBar = document.getElementById('searchBar');
 const btnSearch = document.getElementById('btnSearch');
 const pokemonBox = document.getElementById('pokemonBox');
+const imgSelectedPokemon = document.getElementById('imgSelectedPokemon');
+const pokemonInfoBox = document.getElementById('pokemonInfoBox');
+const infoCard = document.getElementById('infoCard');
+const defaultPhrase = document.getElementById('defaultPhrase');
+const pokemonInfos = document.getElementById('pokemonInfos');
 
 const pokemonsArr = [];
 let pokeCount;
@@ -42,14 +47,18 @@ async function getAllPokemon() {
   }
 }
 
-function showPokemon(pokemon) {
-  console.log(pokemon);
+async function showPokemon(pokemon) {
+  // console.log(pokemon);
 
   const newCol = document.createElement('div');
   newCol.classList.add('col-4', 'd-flex', 'justify-content-center');
 
   const newCard = document.createElement('div');
   newCard.classList.add('card', 'position-relative');
+  newCard.setAttribute(
+    'onclick',
+    `showInfoAbout(${pokemon.id}, "${pokemon.species.url}")`
+  );
 
   const newImg = document.createElement('img');
   newImg.classList.add('pokeSprite');
@@ -90,4 +99,40 @@ function showPokemon(pokemon) {
   newCard.appendChild(newBody);
   newCol.appendChild(newCard);
   pokemonBox.appendChild(newCol);
+}
+
+function showInfoAbout(num, url) {
+  const species = getSpecies(url);
+  infoCard.style.animation = 'slide 2s linear forwards';
+
+  const pokemon = pokemonsArr[num - 1];
+  console.log(pokemon);
+
+  setTimeout(() => {
+    if (pokemon.sprites.other.showdown.front_default) {
+      imgSelectedPokemon.src = pokemon.sprites.other.showdown.front_default;
+    } else {
+      imgSelectedPokemon.src = pokemon.sprites.other.home.front_default;
+    }
+    imgSelectedPokemon.classList.remove('w-50');
+    imgSelectedPokemon.style.height = '100px';
+
+    defaultPhrase.setAttribute('hidden', 'true');
+    pokemonInfos.classList.remove('d-none');
+  }, 1000);
+
+  setTimeout(() => {
+    infoCard.style.animation = '';
+  }, 2000);
+}
+
+async function getSpecies(url) {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 }
