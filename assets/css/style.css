@@ -242,7 +242,7 @@ header {
 
 #infoCard {
   height: 80%;
-  /* animation: slide 2s linear forwards; */
+  /* animation: slide 2s ease-in-out forwards; */
 }
 
 #pokemonInfoBox {

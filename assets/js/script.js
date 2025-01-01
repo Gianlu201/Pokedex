@@ -18,6 +18,12 @@ const selectedPokemonDescription = document.getElementById(
 );
 const selectedPokemonHeight = document.getElementById('selectedPokemonHeight');
 const selectedPokemonWeight = document.getElementById('selectedPokemonWeight');
+const selectedPokemonAbilityBox = document.getElementById(
+  'selectedPokemonAbilityBox'
+);
+const selectedPokemonEvolutionChain = document.getElementById(
+  'selectedPokemonEvolutionChain'
+);
 
 const pokemonsArr = [];
 let pokeCount;
@@ -43,7 +49,7 @@ async function getAllPokemonCount() {
 }
 
 async function getAllPokemon() {
-  for (let i = 0; i < pokeCount; i++) {
+  for (let i = 0; i < Math.min(pokeCount, 1025); i++) {
     try {
       const response = await fetch(
         'https://pokeapi.co/api/v2/pokemon/' + (i + 1)
@@ -112,7 +118,7 @@ async function showPokemon(pokemon) {
 }
 
 function showInfoAbout(num, url) {
-  const species = getSpecies(url);
+  getSpecies(url);
   infoCard.style.animation = 'slide 2s linear forwards';
 
   const pokemon = pokemonsArr[num - 1];
@@ -150,6 +156,51 @@ function showInfoAbout(num, url) {
 
     selectedPokemonHeight.innerText = `${pokemon.height / 10}m`;
     selectedPokemonWeight.innerText = `${pokemon.weight / 10}kg`;
+
+    selectedPokemonAbilityBox.innerHTML = '';
+    for (let i = 0; i < Math.min(pokemon.abilities.length, 2); i++) {
+      const newCol = document.createElement('div');
+      newCol.classList.add('col-6');
+
+      const newParagraph = document.createElement('p');
+      newParagraph.classList.add('text-center', 'ability');
+      newParagraph.innerText = pokemon.abilities[i].ability.name;
+
+      newCol.appendChild(newParagraph);
+      selectedPokemonAbilityBox.appendChild(newCol);
+    }
+
+    let total = 0;
+    pokemon.stats.forEach((element) => {
+      total += element.base_stat;
+      switch (element.stat.name) {
+        case 'hp':
+          document.getElementById('selectedPokemonHp').innerText =
+            element.base_stat;
+          break;
+        case 'attack':
+          document.getElementById('selectedPokemonAttack').innerText =
+            element.base_stat;
+          break;
+        case 'defense':
+          document.getElementById('selectedPokemonDefense').innerText =
+            element.base_stat;
+          break;
+        case 'special-attack':
+          document.getElementById('selectedPokemonSpecialAttack').innerText =
+            element.base_stat;
+          break;
+        case 'special-defense':
+          document.getElementById('selectedPokemonSpecialDefense').innerText =
+            element.base_stat;
+          break;
+        case 'speed':
+          document.getElementById('selectedPokemonSpeed').innerText =
+            element.base_stat;
+          break;
+      }
+    });
+    document.getElementById('selectedPokemonTotalStats').innerText = total;
   }, 1000);
 
   setTimeout(() => {
@@ -162,6 +213,7 @@ async function getSpecies(url) {
     const response = await fetch(url);
     const data = await response.json();
     console.log(data);
+    getEvolutionChain(data.evolution_chain.url);
     let next = false;
     data.flavor_text_entries.forEach((element) => {
       // console.log(element.flavor_text);
@@ -181,11 +233,107 @@ async function getSpecies(url) {
             index = phrase.indexOf('\f');
           }
 
-          selectedPokemonDescription.innerText = phrase.join('');
+          setTimeout(() => {
+            selectedPokemonDescription.innerText = phrase.join('');
+          }, 1000);
           next = true;
         }
       }
     });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getEvolutionChain(url) {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data);
+    showEvolutionChain(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function showEvolutionChain(evolutions) {
+  let chain = 1;
+  let evolution1 = await getMyPokemon(evolutions.chain.species.url);
+  let evolution2;
+  let evolution3;
+  const evolution1Img = document.createElement('img');
+  const evolution2Img = document.createElement('img');
+  const evolution3Img = document.createElement('img');
+  const evolutionImgs = [evolution1Img, evolution2Img, evolution3Img];
+  const lbl1 = document.createElement('span');
+  const lbl2 = document.createElement('span');
+  const labels = [lbl1, lbl2];
+
+  evolutionImgs.forEach((img) => {
+    img.classList.add('d-inline-block', 'evolutionImg');
+  });
+
+  labels.forEach((label) => {
+    label.classList.add('d-inline-block', 'level');
+  });
+
+  evolution1Img.src = evolution1.sprites.front_default;
+
+  console.log(evolutions.chain.species.name);
+  if (evolutions.chain.evolves_to.length > 0) {
+    chain++;
+    evolution2 = await getMyPokemon(evolutions.chain.evolves_to[0].species.url);
+    evolution2Img.src = evolution2.sprites.front_default;
+    lbl1.innerText = `Lv. ${evolutions.chain.evolves_to[0].evolution_details[0].min_level}`;
+    console.log(evolutions.chain.evolves_to[0].species.name);
+    if (evolutions.chain.evolves_to[0].evolves_to.length > 0) {
+      chain++;
+      evolution3 = await getMyPokemon(
+        evolutions.chain.evolves_to[0].evolves_to[0].species.url
+      );
+      evolution3Img.src = evolution3.sprites.front_default;
+      lbl2.innerText = `Lv. ${evolutions.chain.evolves_to[0].evolves_to[0].evolution_details[0].min_level}`;
+      console.log(evolutions.chain.evolves_to[0].evolves_to[0].species.name);
+    }
+  }
+
+  selectedPokemonEvolutionChain.innerHTML = '';
+
+  switch (chain) {
+    case 1:
+      selectedPokemonEvolutionChain.appendChild(evolution1Img);
+      break;
+    case 2:
+      selectedPokemonEvolutionChain.appendChild(evolution1Img);
+      selectedPokemonEvolutionChain.appendChild(lbl1);
+      selectedPokemonEvolutionChain.appendChild(evolution2Img);
+      break;
+    case 3:
+      selectedPokemonEvolutionChain.appendChild(evolution1Img);
+      selectedPokemonEvolutionChain.appendChild(lbl1);
+      selectedPokemonEvolutionChain.appendChild(evolution2Img);
+      selectedPokemonEvolutionChain.appendChild(lbl2);
+      selectedPokemonEvolutionChain.appendChild(evolution3Img);
+      break;
+  }
+}
+
+async function getMyPokemon(url) {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    let myPokemon = await getSinglePokemon(data.varieties[0].pokemon.url);
+
+    return myPokemon;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getSinglePokemon(url) {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
 
     return data;
   } catch (error) {

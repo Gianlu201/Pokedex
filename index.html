@@ -55,6 +55,7 @@
               class="form-control w-75"
               type="text"
               id="searchBar"
+              placeholder="Search your pokemon.."
               autocomplete="off"
             />
             <button class="btn rounded-3" id="btnSearch">
@@ -135,29 +136,26 @@
                   <span class="type-poison mx-1 p-1 rounded-3">Poison</span> -->
                 </div>
                 <h5 class="mt-2 mb-1">Description</h5>
-                <p id="selectedPokemonDescription" class="text-muted">
-                  Si riempie di energia grazie ai grandi petali del fiore, che
-                  spalanca catturando i raggi solari.
-                </p>
+                <p id="selectedPokemonDescription" class="text-muted"></p>
                 <div class="physicsInfo row w-100">
                   <div class="col-6">
                     <p class="text-center fw-semibold mb-2">Height</p>
-                    <p class="text-center" id="selectedPokemonHeight">2m</p>
+                    <p class="text-center" id="selectedPokemonHeight"></p>
                   </div>
                   <div class="col-6">
                     <p class="text-center fw-semibold mb-2">Weight</p>
-                    <p class="text-center" id="selectedPokemonWeight">100kg</p>
+                    <p class="text-center" id="selectedPokemonWeight"></p>
                   </div>
                 </div>
                 <div class="abilities w-100">
                   <h5 class="text-center">Abilities</h5>
                   <div class="row w-100" id="selectedPokemonAbilityBox">
-                    <div class="col-6">
+                    <!-- <div class="col-6">
                       <p class="text-center ability">overgrow</p>
                     </div>
                     <div class="col-6">
                       <p class="text-center ability">chlorophyll</p>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
                 <div class="stats w-100">
@@ -171,8 +169,7 @@
                       <span
                         class="d-block circularBorder"
                         id="selectedPokemonHp"
-                        >80</span
-                      >
+                      ></span>
                     </div>
                     <div class="text-center rounded-5 statValue">
                       <span
@@ -182,8 +179,7 @@
                       <span
                         class="d-block circularBorder"
                         id="selectedPokemonAttack"
-                        >82</span
-                      >
+                      ></span>
                     </div>
                     <div class="text-center rounded-5 statValue">
                       <span
@@ -193,8 +189,7 @@
                       <span
                         class="d-block circularBorder"
                         id="selectedPokemonDefense"
-                        >83</span
-                      >
+                      ></span>
                     </div>
                     <div class="text-center rounded-5 statValue">
                       <span
@@ -204,8 +199,7 @@
                       <span
                         class="d-block circularBorder"
                         id="selectedPokemonSpecialAttack"
-                        >100</span
-                      >
+                      ></span>
                     </div>
                     <div class="text-center rounded-5 statValue">
                       <span
@@ -215,8 +209,7 @@
                       <span
                         class="d-block circularBorder"
                         id="selectedPokemonSpecialDefense"
-                        >100</span
-                      >
+                      ></span>
                     </div>
                     <div class="text-center rounded-5 statValue">
                       <span
@@ -226,8 +219,7 @@
                       <span
                         class="d-block circularBorder"
                         id="selectedPokemonSpeed"
-                        >80</span
-                      >
+                      ></span>
                     </div>
                     <div class="text-center rounded-5 statValue statTotal">
                       <span
@@ -237,8 +229,7 @@
                       <span
                         class="d-block circularBorder"
                         id="selectedPokemonTotalStats"
-                        >525</span
-                      >
+                      ></span>
                     </div>
                   </div>
                 </div>
