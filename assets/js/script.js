@@ -278,12 +278,20 @@ async function showEvolutionChain(evolutions) {
   });
 
   evolution1Img.src = evolution1.sprites.front_default;
+  evolution1Img.setAttribute(
+    'onclick',
+    `showInfoAbout(${evolution1.id}, "${evolution1.species.url}")`
+  );
 
   console.log(evolutions.chain.species.name);
   if (evolutions.chain.evolves_to.length > 0) {
     chain++;
     evolution2 = await getMyPokemon(evolutions.chain.evolves_to[0].species.url);
     evolution2Img.src = evolution2.sprites.front_default;
+    evolution2Img.setAttribute(
+      'onclick',
+      `showInfoAbout(${evolution2.id}, "${evolution2.species.url}")`
+    );
     lbl1.innerText = `Lv. ${evolutions.chain.evolves_to[0].evolution_details[0].min_level}`;
     console.log(evolutions.chain.evolves_to[0].species.name);
     if (evolutions.chain.evolves_to[0].evolves_to.length > 0) {
@@ -292,6 +300,10 @@ async function showEvolutionChain(evolutions) {
         evolutions.chain.evolves_to[0].evolves_to[0].species.url
       );
       evolution3Img.src = evolution3.sprites.front_default;
+      evolution3Img.setAttribute(
+        'onclick',
+        `showInfoAbout(${evolution3.id}, "${evolution3.species.url}")`
+      );
       lbl2.innerText = `Lv. ${evolutions.chain.evolves_to[0].evolves_to[0].evolution_details[0].min_level}`;
       console.log(evolutions.chain.evolves_to[0].evolves_to[0].species.name);
     }
