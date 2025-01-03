@@ -86,10 +86,6 @@ header {
   transform: translate(-50%, -50%);
 }
 
-#bigCol section:first-of-type {
-  margin: 0 auto;
-}
-
 #searchBar {
   padding: 15px;
   border: 1px solid #cecece !important;
@@ -105,9 +101,10 @@ header {
   background-color: #ec2e30;
   width: 50px;
   position: absolute;
-  right: 8px;
+  right: 21.2%;
   top: 50%;
   transform: translateY(-50%);
+  box-shadow: 0 0 6px 3px rgb(236, 46, 48, 0.6);
 }
 
 #pokemonBox {

@@ -62,9 +62,11 @@
         </div>
 
         <div class="col-9 d-none" id="bigCol">
-          <section class="position-relative w-75">
+          <section
+            class="d-flex justify-content-center align-items-center gap-2 position-relative w-100"
+          >
             <input
-              class="rounded-4 w-100"
+              class="rounded-4 w-75"
               type="text"
               id="searchBar"
               placeholder="Search your pokemon.."
@@ -73,6 +75,59 @@
             <button class="btn rounded-3" id="btnSearch">
               <i class="bi bi-search text-white"></i>
             </button>
+            <div class="dropdown">
+              <a
+                class="btn dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="bi bi-filter"></i>&nbsp; Filters
+              </a>
+
+              <ul class="dropdown-menu">
+                <li class="d-flex">
+                  <span class="dropdown-item d-inline-block">Type</span>
+                  <select class="d-inline-block" name="type" id="selType">
+                    <option value="">Type</option>
+                    <option value="normal">Normal</option>
+                    <option value="fighting">Fighting</option>
+                    <option value="flying">Flying</option>
+                    <option value="poison">Poison</option>
+                    <option value="ground">Ground</option>
+                    <option value="rock">Rock</option>
+                    <option value="bug">Bug</option>
+                    <option value="ghost">Ghost</option>
+                    <option value="steel">Steel</option>
+                    <option value="fire">Fire</option>
+                    <option value="water">Water</option>
+                    <option value="grass">Grass</option>
+                    <option value="electric">Electric</option>
+                    <option value="psychic">Psychic</option>
+                    <option value="ice">Ice</option>
+                    <option value="dragon">Dragon</option>
+                    <option value="dark">Dark</option>
+                    <option value="fairy">Fairy</option>
+                    <option value="stellar">Stellar</option>
+                  </select>
+                </li>
+                <li class="d-flex">
+                  <span class="dropdown-item d-inline-block">Generation</span>
+                  <select class="d-inline-block" name="generation" id="selGen">
+                    <option value="">gen</option>
+                    <option value="i">i</option>
+                    <option value="ii">ii</option>
+                    <option value="iii">iii</option>
+                    <option value="iv">iv</option>
+                    <option value="v">v</option>
+                    <option value="vi">vi</option>
+                    <option value="vii">vii</option>
+                    <option value="viii">viii</option>
+                  </select>
+                </li>
+              </ul>
+            </div>
           </section>
           <section class="d-flex flex-wrap" id="pokemonBox">
             <!-- Pokémon cards -->
@@ -139,9 +194,7 @@
                 id="pokemonInfos"
                 class="d-flex justify-content-start align-items-center flex-column h-100 px-3 d-none"
               >
-                <h3 class="pokemonName fw-bold" id="selectedPokemonName">
-                  Venusaur
-                </h3>
+                <h3 class="pokemonName fw-bold" id="selectedPokemonName"></h3>
                 <p id="selectedPokemonNumer" class="text-muted">N° 1</p>
                 <div class="mb-2" id="selectedPokemonTypeBox">
                   <!-- <span class="type-grass mx-1 p-1 rounded-3">Grass</span>
@@ -149,7 +202,7 @@
                 </div>
                 <h5 class="mt-2 mb-1">Description</h5>
                 <p id="selectedPokemonDescription" class="text-muted"></p>
-                <div class="physicsInfo row w-100">
+                <div class="row w-100">
                   <div class="col-6">
                     <p class="text-center fw-semibold mb-2">Height</p>
                     <p class="text-center" id="selectedPokemonHeight"></p>
@@ -159,17 +212,17 @@
                     <p class="text-center" id="selectedPokemonWeight"></p>
                   </div>
                 </div>
-                <div class="abilities w-100">
-                  <h5 class="text-center">Abilities</h5>
-                  <div class="row w-100" id="selectedPokemonAbilityBox">
-                    <!-- <div class="col-6">
+                <h5 class="text-center">Abilities</h5>
+
+                <div class="row w-100" id="selectedPokemonAbilityBox">
+                  <!-- <div class="col-6">
                       <p class="text-center ability">overgrow</p>
                     </div>
                     <div class="col-6">
                       <p class="text-center ability">chlorophyll</p>
                     </div> -->
-                  </div>
                 </div>
+
                 <div class="stats w-100">
                   <h5 class="text-center">Stats</h5>
                   <div class="statsValues d-flex justify-content-around w-100">

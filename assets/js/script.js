@@ -24,6 +24,8 @@ const selectedPokemonAbilityBox = document.getElementById(
 const selectedPokemonEvolutionChain = document.getElementById(
   'selectedPokemonEvolutionChain'
 );
+const selType = document.getElementById('selType');
+const selGen = document.getElementById('selGen');
 
 const pokemonsArr = [];
 let pokeCount;
@@ -42,6 +44,7 @@ document.addEventListener('scroll', () => {
 
 btnSearch.addEventListener('click', () => {
   searchPokemon(true);
+  searchBar.blur();
 });
 
 searchBar.addEventListener('keyup', (key) => {
@@ -49,6 +52,7 @@ searchBar.addEventListener('keyup', (key) => {
     searchPokemon(false);
   } else {
     searchPokemon(true);
+    searchBar.blur();
   }
 });
 
@@ -445,12 +449,31 @@ function searchPokemon(clean) {
     if (
       pokemonsArr[i].name.indexOf(searchBar.value.trim().toLowerCase()) >= 0
     ) {
-      searchedPokemons.push(pokemonsArr[i]);
+      switch (true) {
+        case selType.value != '' && selGen.value != '':
+          console.log('Both');
+          break;
+        case selType.value != '':
+          pokemonsArr[i].types.forEach((type) => {
+            if (type.type.name == selType.value) {
+              searchedPokemons.push(pokemonsArr[i]);
+            }
+          });
+          break;
+        case selGen.value != '':
+          console.log('Gen');
+          break;
+        default:
+          searchedPokemons.push(pokemonsArr[i]);
+          break;
+      }
     }
   }
   showSearchedPokemon(searchedPokemons);
   if (clean) {
     searchBar.value = '';
+    selType.value = '';
+    selGen.value = '';
   }
 }
 
