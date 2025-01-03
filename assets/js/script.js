@@ -31,6 +31,15 @@ let searchedPokemons = [];
 
 document.addEventListener('load', init());
 
+document.addEventListener('scroll', () => {
+  if (window.scrollY < 900) {
+    document.getElementById('goTop').classList.add('d-none');
+  }
+  if (window.scrollY > 900) {
+    document.getElementById('goTop').classList.remove('d-none');
+  }
+});
+
 btnSearch.addEventListener('click', () => {
   searchPokemon(true);
 });
