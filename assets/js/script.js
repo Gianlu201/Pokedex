@@ -28,6 +28,7 @@ const selType = document.getElementById('selType');
 const selGen = document.getElementById('selGen');
 
 const pokemonsArr = [];
+const pokemonsSpeciesArr = [];
 let pokeCount;
 let searchedPokemons = [];
 
@@ -87,6 +88,7 @@ async function getAllPokemon() {
       );
       const data = await response.json();
       pokemonsArr.push(data);
+      getPokemonSpecies(data.species.url);
       if (data.id == 1025) {
         console.log('fine');
       }
@@ -96,6 +98,21 @@ async function getAllPokemon() {
     }
   }
 }
+
+//------
+
+async function getPokemonSpecies(url) {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    // getEvolutionChain(data.evolution_chain.url);
+    pokemonsSpeciesArr.push(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//------
 
 async function showPokemon(pokemon) {
   // console.log(pokemon);
@@ -152,10 +169,14 @@ async function showPokemon(pokemon) {
 }
 
 function showInfoAbout(num, url) {
-  getSpecies(url);
+  const index = num - 1;
+
+  const species = pokemonsSpeciesArr[index];
+  getEvolutionChain(species.evolution_chain.url);
+
   infoCard.style.animation = 'slide 4s linear forwards';
 
-  const pokemon = pokemonsArr[num - 1];
+  const pokemon = pokemonsArr[index];
   console.log(pokemon);
 
   setTimeout(() => {
@@ -188,6 +209,37 @@ function showInfoAbout(num, url) {
       newType.innerText = pokemon.types[i].type.name;
 
       selectedPokemonTypeBox.appendChild(newType);
+    }
+
+    let next = false;
+    species.flavor_text_entries.forEach((element) => {
+      if (!next) {
+        if (element.language.name == 'en') {
+          let phrase = element.flavor_text.split('');
+
+          let index = phrase.indexOf('\n');
+          while (index > 0) {
+            phrase[index] = ' ';
+            index = phrase.indexOf('\n');
+          }
+
+          index = phrase.indexOf('\f');
+          while (index > 0) {
+            phrase[index] = ' ';
+            index = phrase.indexOf('\f');
+          }
+
+          selectedPokemonDescription.innerText = phrase.join('');
+
+          next = true;
+        }
+      }
+    });
+
+    if (species.color.name != 'white') {
+      pokemonInfos.style = `--color: ${species.color.name}`;
+    } else {
+      pokemonInfos.style = `--color: #cecece`;
     }
 
     selectedPokemonHeight.innerText = `${pokemon.height / 10}m`;
@@ -242,50 +294,6 @@ function showInfoAbout(num, url) {
   setTimeout(() => {
     infoCard.style.animation = '';
   }, 4000);
-}
-
-async function getSpecies(url) {
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log(data);
-    getEvolutionChain(data.evolution_chain.url);
-    let next = false;
-    data.flavor_text_entries.forEach((element) => {
-      // console.log(element.flavor_text);
-      if (!next) {
-        if (element.language.name == 'en') {
-          let phrase = element.flavor_text.split('');
-
-          let index = phrase.indexOf('\n');
-          while (index > 0) {
-            phrase[index] = ' ';
-            index = phrase.indexOf('\n');
-          }
-
-          index = phrase.indexOf('\f');
-          while (index > 0) {
-            phrase[index] = ' ';
-            index = phrase.indexOf('\f');
-          }
-
-          setTimeout(() => {
-            selectedPokemonDescription.innerText = phrase.join('');
-          }, 1000);
-          next = true;
-        }
-      }
-    });
-    setTimeout(() => {
-      if (data.color.name != 'white') {
-        pokemonInfos.style = `--color: ${data.color.name}`;
-      } else {
-        pokemonInfos.style = `--color: #cecece`;
-      }
-    }, 1000);
-  } catch (error) {
-    console.log(error);
-  }
 }
 
 async function getEvolutionChain(url) {
@@ -451,7 +459,14 @@ function searchPokemon(clean) {
     ) {
       switch (true) {
         case selType.value != '' && selGen.value != '':
-          console.log('Both');
+          pokemonsArr[i].types.forEach((type) => {
+            if (
+              type.type.name == selType.value &&
+              pokemonsSpeciesArr[i].generation.name == selGen.value
+            ) {
+              searchedPokemons.push(pokemonsArr[i]);
+            }
+          });
           break;
         case selType.value != '':
           pokemonsArr[i].types.forEach((type) => {
@@ -461,7 +476,9 @@ function searchPokemon(clean) {
           });
           break;
         case selGen.value != '':
-          console.log('Gen');
+          if (pokemonsSpeciesArr[i].generation.name == selGen.value) {
+            searchedPokemons.push(pokemonsArr[i]);
+          }
           break;
         default:
           searchedPokemons.push(pokemonsArr[i]);
