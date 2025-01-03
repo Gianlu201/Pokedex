@@ -268,6 +268,11 @@ async function getSpecies(url) {
         }
       }
     });
+    if (data.color.name != 'white') {
+      pokemonInfos.style = `--color: ${data.color.name}`;
+    } else {
+      pokemonInfos.style = `--color: #cecece`;
+    }
   } catch (error) {
     console.log(error);
   }
