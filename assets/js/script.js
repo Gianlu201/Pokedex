@@ -27,8 +27,17 @@ const selectedPokemonEvolutionChain = document.getElementById(
 
 const pokemonsArr = [];
 let pokeCount;
+let searchedPokemons = [];
 
 document.addEventListener('load', init());
+
+btnSearch.addEventListener('click', () => {
+  searchPokemon(true);
+});
+
+searchBar.addEventListener('keyup', () => {
+  searchPokemon(false);
+});
 
 function init() {
   getAllPokemonCount();
@@ -350,5 +359,29 @@ async function getSinglePokemon(url) {
     return data;
   } catch (error) {
     console.log(error);
+  }
+}
+
+function searchPokemon(clean) {
+  searchedPokemons = [];
+  for (let i = 0; i < pokemonsArr.length; i++) {
+    if (
+      pokemonsArr[i].name.indexOf(searchBar.value.trim().toLowerCase()) >= 0
+    ) {
+      searchedPokemons.push(pokemonsArr[i]);
+    }
+  }
+  showSearchedPokemon(searchedPokemons);
+  if (clean) {
+    searchBar.value = '';
+  }
+}
+
+function showSearchedPokemon(pokemons) {
+  if (pokemons.length > 0) {
+    pokemonBox.innerHTML = '';
+    pokemons.forEach((pokemon) => {
+      showPokemon(pokemon);
+    });
   }
 }
