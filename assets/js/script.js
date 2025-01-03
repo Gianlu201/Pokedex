@@ -44,8 +44,12 @@ btnSearch.addEventListener('click', () => {
   searchPokemon(true);
 });
 
-searchBar.addEventListener('keyup', () => {
-  searchPokemon(false);
+searchBar.addEventListener('keyup', (key) => {
+  if (key.code != 'Enter') {
+    searchPokemon(false);
+  } else {
+    searchPokemon(true);
+  }
 });
 
 function init() {
@@ -268,11 +272,13 @@ async function getSpecies(url) {
         }
       }
     });
-    if (data.color.name != 'white') {
-      pokemonInfos.style = `--color: ${data.color.name}`;
-    } else {
-      pokemonInfos.style = `--color: #cecece`;
-    }
+    setTimeout(() => {
+      if (data.color.name != 'white') {
+        pokemonInfos.style = `--color: ${data.color.name}`;
+      } else {
+        pokemonInfos.style = `--color: #cecece`;
+      }
+    }, 1000);
   } catch (error) {
     console.log(error);
   }

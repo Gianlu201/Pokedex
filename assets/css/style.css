@@ -86,8 +86,28 @@ header {
   transform: translate(-50%, -50%);
 }
 
+#bigCol section:first-of-type {
+  margin: 0 auto;
+}
+
+#searchBar {
+  padding: 15px;
+  border: 1px solid #cecece !important;
+}
+
+#searchBar:focus,
+#searchBar:focus-visible,
+#searchBar:active {
+  border: 1px solid #cecece !important;
+}
+
 #btnSearch {
   background-color: #ec2e30;
+  width: 50px;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 #pokemonBox {
