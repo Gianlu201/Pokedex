@@ -26,6 +26,7 @@ const selectedPokemonEvolutionChain = document.getElementById(
 );
 const selType = document.getElementById('selType');
 const selGen = document.getElementById('selGen');
+const ckboxLegendary = document.getElementById('ckboxLegendary');
 
 const pokemonsArr = [];
 const pokemonsSpeciesArr = [];
@@ -464,24 +465,48 @@ function searchPokemon(clean) {
               type.type.name == selType.value &&
               pokemonsSpeciesArr[i].generation.name == selGen.value
             ) {
-              searchedPokemons.push(pokemonsArr[i]);
+              if (ckboxLegendary.checked) {
+                if (pokemonsSpeciesArr[i].is_legendary) {
+                  searchedPokemons.push(pokemonsArr[i]);
+                }
+              } else {
+                searchedPokemons.push(pokemonsArr[i]);
+              }
             }
           });
           break;
         case selType.value != '':
           pokemonsArr[i].types.forEach((type) => {
             if (type.type.name == selType.value) {
-              searchedPokemons.push(pokemonsArr[i]);
+              if (ckboxLegendary.checked) {
+                if (pokemonsSpeciesArr[i].is_legendary) {
+                  searchedPokemons.push(pokemonsArr[i]);
+                }
+              } else {
+                searchedPokemons.push(pokemonsArr[i]);
+              }
             }
           });
           break;
         case selGen.value != '':
           if (pokemonsSpeciesArr[i].generation.name == selGen.value) {
-            searchedPokemons.push(pokemonsArr[i]);
+            if (ckboxLegendary.checked) {
+              if (pokemonsSpeciesArr[i].is_legendary) {
+                searchedPokemons.push(pokemonsArr[i]);
+              }
+            } else {
+              searchedPokemons.push(pokemonsArr[i]);
+            }
           }
           break;
         default:
-          searchedPokemons.push(pokemonsArr[i]);
+          if (ckboxLegendary.checked) {
+            if (pokemonsSpeciesArr[i].is_legendary) {
+              searchedPokemons.push(pokemonsArr[i]);
+            }
+          } else {
+            searchedPokemons.push(pokemonsArr[i]);
+          }
           break;
       }
     }
@@ -491,6 +516,7 @@ function searchPokemon(clean) {
     searchBar.value = '';
     selType.value = '';
     selGen.value = '';
+    ckboxLegendary.checked = false;
   }
 }
 
