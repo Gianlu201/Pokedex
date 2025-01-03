@@ -42,6 +42,11 @@ searchBar.addEventListener('keyup', () => {
 function init() {
   getAllPokemonCount();
   pokemonBox.innerHTML = '';
+  setTimeout(() => {
+    document.getElementById('bigCol').classList.remove('d-none');
+    document.getElementById('infoCol').classList.remove('d-none');
+    document.getElementById('bigLoader').classList.add('d-none');
+  }, 7000);
 }
 
 async function getAllPokemonCount() {
@@ -65,6 +70,9 @@ async function getAllPokemon() {
       );
       const data = await response.json();
       pokemonsArr.push(data);
+      if (data.id == 1025) {
+        console.log('fine');
+      }
       showPokemon(data);
     } catch (error) {
       console.log(error);
