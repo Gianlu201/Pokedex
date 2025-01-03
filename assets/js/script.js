@@ -145,12 +145,14 @@ async function showPokemon(pokemon) {
 
 function showInfoAbout(num, url) {
   getSpecies(url);
-  infoCard.style.animation = 'slide 2s linear forwards';
+  infoCard.style.animation = 'slide 4s linear forwards';
 
   const pokemon = pokemonsArr[num - 1];
   console.log(pokemon);
 
   setTimeout(() => {
+    pokemonInfos.scrollTo(0, 0);
+
     if (pokemon.sprites.other.showdown.front_default) {
       imgSelectedPokemon.src = pokemon.sprites.other.showdown.front_default;
     } else {
@@ -231,7 +233,7 @@ function showInfoAbout(num, url) {
 
   setTimeout(() => {
     infoCard.style.animation = '';
-  }, 2000);
+  }, 4000);
 }
 
 async function getSpecies(url) {
@@ -292,7 +294,7 @@ async function showEvolutionChain(evolutions) {
   const evolution3Img = document.createElement('img');
   const evolutionImgs = [evolution1Img, evolution2Img, evolution3Img];
   const lbl1 = document.createElement('span');
-  const lbl2 = document.createElement('span');
+  let lbl2 = document.createElement('span');
   const labels = [lbl1, lbl2];
 
   evolutionImgs.forEach((img) => {
@@ -318,7 +320,27 @@ async function showEvolutionChain(evolutions) {
       'onclick',
       `showInfoAbout(${evolution2.id}, "${evolution2.species.url}")`
     );
-    lbl1.innerText = `Lv. ${evolutions.chain.evolves_to[0].evolution_details[0].min_level}`;
+    if (evolutions.chain.evolves_to[0].evolution_details[0].min_level) {
+      lbl1.innerText = `Lv. ${evolutions.chain.evolves_to[0].evolution_details[0].min_level}`;
+    } else if (
+      evolutions.chain.evolves_to[0].evolution_details[0].trigger.name ==
+      'use-item'
+    ) {
+      lbl1.innerText = `Item`;
+      lbl1.setAttribute('data-bs-toggle', 'popover');
+      lbl1.setAttribute('data-bs-trigger', 'hover focus');
+      lbl1.setAttribute('data-bs-placement', 'bottom');
+      lbl1.setAttribute(
+        'data-bs-content',
+        `${evolutions.chain.evolves_to[0].evolution_details[0].item.name}`
+      );
+      lbl1.style.cursor = 'pointer';
+      console.log(
+        evolutions.chain.evolves_to[0].evolution_details[0].item.name
+      );
+    } else {
+      lbl1.innerText = 'Lv. ???';
+    }
     console.log(evolutions.chain.evolves_to[0].species.name);
     if (evolutions.chain.evolves_to[0].evolves_to.length > 0) {
       chain++;
@@ -330,7 +352,27 @@ async function showEvolutionChain(evolutions) {
         'onclick',
         `showInfoAbout(${evolution3.id}, "${evolution3.species.url}")`
       );
-      lbl2.innerText = `Lv. ${evolutions.chain.evolves_to[0].evolves_to[0].evolution_details[0].min_level}`;
+      if (
+        evolutions.chain.evolves_to[0].evolves_to[0].evolution_details[0]
+          .min_level
+      ) {
+        lbl2.innerText = `Lv. ${evolutions.chain.evolves_to[0].evolves_to[0].evolution_details[0].min_level}`;
+      } else if (
+        evolutions.chain.evolves_to[0].evolves_to[0].evolution_details[0]
+          .trigger.name == 'use-item'
+      ) {
+        lbl2.innerText = 'Item';
+        lbl2.setAttribute('data-bs-toggle', 'popover');
+        lbl2.setAttribute('data-bs-trigger', 'hover');
+        lbl2.setAttribute('data-bs-placement', 'bottom');
+        lbl2.setAttribute(
+          'data-bs-content',
+          `${evolutions.chain.evolves_to[0].evolves_to[0].evolution_details[0].item.name}`
+        );
+        lbl2.style.cursor = 'pointer';
+      } else {
+        lbl2.innerText = 'Lv. ???';
+      }
       console.log(evolutions.chain.evolves_to[0].evolves_to[0].species.name);
     }
   }
@@ -354,6 +396,13 @@ async function showEvolutionChain(evolutions) {
       selectedPokemonEvolutionChain.appendChild(evolution3Img);
       break;
   }
+
+  const popoverTriggerList = document.querySelectorAll(
+    '[data-bs-toggle="popover"]'
+  );
+  const popoverList = [...popoverTriggerList].map(
+    (popoverTriggerEl) => new bootstrap.Popover(popoverTriggerEl)
+  );
 }
 
 async function getMyPokemon(url) {
