@@ -62,8 +62,8 @@ function init() {
   getAllPokemonCount();
   pokemonBox.innerHTML = '';
   setTimeout(() => {
-    document.getElementById('bigCol').classList.remove('d-none');
-    document.getElementById('infoCol').classList.remove('d-none');
+    document.getElementById('bigCol').classList.remove('hidden');
+    document.getElementById('infoCol').classList.remove('hidden');
     document.getElementById('bigLoader').classList.add('d-none');
   }, 8000);
 }
@@ -105,8 +105,6 @@ async function getAllPokemon() {
   }
 }
 
-//------
-
 async function getPokemonSpecies(url) {
   try {
     const response = await fetch(url);
@@ -118,14 +116,12 @@ async function getPokemonSpecies(url) {
   }
 }
 
-//------
-
 async function showPokemon(pokemon, i) {
   // console.log(pokemon);
   const index = i - 8976;
 
   const newCol = document.createElement('div');
-  newCol.classList.add('col-4', 'd-flex', 'justify-content-center');
+  newCol.classList.add('col-6', 'col-lg-4', 'd-flex', 'justify-content-center');
 
   const newCard = document.createElement('div');
   newCard.classList.add('card', 'position-relative');

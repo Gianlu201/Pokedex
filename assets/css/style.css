@@ -15,6 +15,10 @@ a:visited {
   border-radius: 50%;
 }
 
+.hidden {
+  display: none !important;
+}
+
 /* .pokedex {
   font-family: 'Pokemon Solid', sans-serif;
 } */
@@ -101,10 +105,39 @@ header {
   background-color: #ec2e30;
   width: 50px;
   position: absolute;
-  right: 19.5%;
   top: 50%;
   transform: translateY(-50%);
   box-shadow: 0 0 6px 3px rgb(236, 46, 48, 0.6);
+}
+
+@media screen and (min-width: 578px) {
+  #btnSearch {
+    right: 14%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  #btnSearch {
+    right: 22%;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  #btnSearch {
+    right: 19.5%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #btnSearch {
+    right: 20.3%;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  #btnSearch {
+    right: 19.5%;
+  }
 }
 
 .filter-item {
