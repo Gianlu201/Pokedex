@@ -1,3 +1,5 @@
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
 const main = document.querySelector('main');
 const dispGrid = document.querySelector('.display-style span:nth-of-type(1)');
 const dispList = document.querySelector('.display-style span:nth-of-type(2)');
@@ -79,7 +81,7 @@ btnModalClose.addEventListener('click', (e) => {
 
 document.addEventListener('click', (e) => {
   if (pokemonModalOpened) {
-    console.log(e.target);
+    // console.log(e.target);
     let dismiss = true;
     e.target.classList.forEach((element) => {
       if (element == 'mod') {
@@ -136,7 +138,7 @@ async function getAllPokemon() {
 
       showPokemon(data, index);
     } catch (error) {
-      console.log(error, 'ripetizione ' + i);
+      console.log(error);
     }
   }
 }
