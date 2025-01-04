@@ -1,5 +1,3 @@
-import { SpeedInsights } from '@vercel/speed-insights/next';
-
 const main = document.querySelector('main');
 const dispGrid = document.querySelector('.display-style span:nth-of-type(1)');
 const dispList = document.querySelector('.display-style span:nth-of-type(2)');
