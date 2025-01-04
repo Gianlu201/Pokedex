@@ -65,7 +65,7 @@ function init() {
     document.getElementById('bigCol').classList.remove('d-none');
     document.getElementById('infoCol').classList.remove('d-none');
     document.getElementById('bigLoader').classList.add('d-none');
-  }, 7000);
+  }, 8000);
 }
 
 async function getAllPokemonCount() {
@@ -82,20 +82,25 @@ async function getAllPokemonCount() {
 }
 
 async function getAllPokemon() {
-  for (let i = 0; i < Math.min(pokeCount, 1025); i++) {
+  for (let i = 0; i < pokeCount; i++) {
     try {
+      let index;
+      if (i > 1024) {
+        index = i + 8976;
+      } else {
+        index = i + 1;
+      }
       const response = await fetch(
-        'https://pokeapi.co/api/v2/pokemon/' + (i + 1)
+        'https://pokeapi.co/api/v2/pokemon/' + index
       );
+
       const data = await response.json();
       pokemonsArr.push(data);
       getPokemonSpecies(data.species.url);
-      if (data.id == 1025) {
-        console.log('fine');
-      }
-      showPokemon(data);
+
+      showPokemon(data, index);
     } catch (error) {
-      console.log(error);
+      console.log(error, 'ripetizione ' + i);
     }
   }
 }
@@ -115,8 +120,9 @@ async function getPokemonSpecies(url) {
 
 //------
 
-async function showPokemon(pokemon) {
+async function showPokemon(pokemon, i) {
   // console.log(pokemon);
+  const index = i - 8976;
 
   const newCol = document.createElement('div');
   newCol.classList.add('col-4', 'd-flex', 'justify-content-center');
@@ -130,7 +136,22 @@ async function showPokemon(pokemon) {
 
   const newImg = document.createElement('img');
   newImg.classList.add('pokeSprite');
-  newImg.src = pokemon.sprites.other.home.front_default;
+  if (pokemon.sprites.other.home.front_default) {
+    newImg.src = pokemon.sprites.other.home.front_default;
+  } else if (pokemon.sprites.front_default) {
+    newImg.src = pokemon.sprites.front_default;
+  } else if (pokemon.sprites.other['official-artwork'].front_default) {
+    newImg.src = pokemon.sprites.other['official-artwork'].front_default;
+  } else {
+    setTimeout(() => {
+      pokemonsArr.forEach((poke) => {
+        if (pokemonsSpeciesArr[index].varieties[0].pokemon.name == poke.name) {
+          newImg.src = poke.sprites.front_default;
+        }
+      });
+    }, 2000);
+  }
+
   newImg.alt = pokemon.name;
 
   const newBody = document.createElement('div');
@@ -170,23 +191,40 @@ async function showPokemon(pokemon) {
 }
 
 function showInfoAbout(num, url) {
-  const index = num - 1;
+  let index;
+  if (num < 10000) {
+    index = num - 1;
+  } else {
+    index = num - 8976;
+  }
 
   const species = pokemonsSpeciesArr[index];
+  // console.log(species);
   getEvolutionChain(species.evolution_chain.url);
 
   infoCard.style.animation = 'slide 4s linear forwards';
 
   const pokemon = pokemonsArr[index];
-  console.log(pokemon);
+  // console.log(pokemon);
 
   setTimeout(() => {
     pokemonInfos.scrollTo(0, 0);
 
     if (pokemon.sprites.other.showdown.front_default) {
       imgSelectedPokemon.src = pokemon.sprites.other.showdown.front_default;
-    } else {
+    } else if (pokemon.sprites.other.home.front_default) {
       imgSelectedPokemon.src = pokemon.sprites.other.home.front_default;
+    } else if (pokemon.sprites.front_default) {
+      imgSelectedPokemon.src = pokemon.sprites.front_default;
+    } else if (pokemon.sprites.other['official-artwork'].front_default) {
+      imgSelectedPokemon.src =
+        pokemon.sprites.other['official-artwork'].front_default;
+    } else {
+      pokemonsArr.forEach((poke) => {
+        if (pokemonsSpeciesArr[index].varieties[0].pokemon.name == poke.name) {
+          imgSelectedPokemon.src = poke.sprites.front_default;
+        }
+      });
     }
     imgSelectedPokemon.classList.remove('w-50');
     imgSelectedPokemon.style.height = '100px';
@@ -301,7 +339,7 @@ async function getEvolutionChain(url) {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     showEvolutionChain(data);
   } catch (error) {
     console.log(error);
@@ -335,7 +373,6 @@ async function showEvolutionChain(evolutions) {
     `showInfoAbout(${evolution1.id}, "${evolution1.species.url}")`
   );
 
-  console.log(evolutions.chain.species.name);
   if (evolutions.chain.evolves_to.length > 0) {
     chain++;
     evolution2 = await getMyPokemon(evolutions.chain.evolves_to[0].species.url);
@@ -359,13 +396,10 @@ async function showEvolutionChain(evolutions) {
         `${evolutions.chain.evolves_to[0].evolution_details[0].item.name}`
       );
       lbl1.style.cursor = 'pointer';
-      console.log(
-        evolutions.chain.evolves_to[0].evolution_details[0].item.name
-      );
     } else {
       lbl1.innerText = 'Lv. ???';
     }
-    console.log(evolutions.chain.evolves_to[0].species.name);
+
     if (evolutions.chain.evolves_to[0].evolves_to.length > 0) {
       chain++;
       evolution3 = await getMyPokemon(
@@ -397,7 +431,6 @@ async function showEvolutionChain(evolutions) {
       } else {
         lbl2.innerText = 'Lv. ???';
       }
-      console.log(evolutions.chain.evolves_to[0].evolves_to[0].species.name);
     }
   }
 
@@ -524,7 +557,7 @@ function showSearchedPokemon(pokemons) {
   if (pokemons.length > 0) {
     pokemonBox.innerHTML = '';
     pokemons.forEach((pokemon) => {
-      showPokemon(pokemon);
+      showPokemon(pokemon, pokemon.id);
     });
   }
 }
